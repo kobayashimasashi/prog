@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<link rel="stylesheet" href="css/sample.css">
+	<title>シフト</title>
+</head>
+
+<body>
+
+	<header>
+		<h1>シフト</h1>
+	</header>
+
+	<main>
+		<div>
+			<ul>
+				<li>12/31</li>
+				<li id="mon">
+					<p id="koba"></p>
+					<p id="sato"></p>
+					<p id="suzu"></p>
+				</li>
+			</ul>
+			<ul>
+				<li>1/1</li>
+				<li id="tues">
+					<p id="koba1"></p>
+					<p id="sato1"></p>
+					<p id="suzu1"></p>
+				</li>
+			</ul>
+			<ul>
+				<li>1/2</li>
+				<li id="wed">
+					<p id="koba2"></p>
+					<p id="sato2"></p>
+					<p id="suzu2"></p>
+				</li>
+			</ul>
+
+		</div>
+		<ul>
+			<li>日付</li>
+			<li>12/31</li>
+			<li>1/1</li>
+			<li>1/2</li>
+		</ul>
+
+		<ul>
+			<li>小林</li>
+			<li id="ok">出勤できます</li>
+			<li id="ok1">出勤できます</li>
+			<li id="ok2">出勤できます</li>
+		</ul>
+		<ul>
+			<li>佐藤</li>
+			<li id="ok3">出勤できます</li>
+			<li id="ok4">出勤できます</li>
+			<li id="ok5">出勤できます</li>
+		</ul>
+		<ul>
+			<li>鈴木</li>
+			<li id="ok6">出勤できます</li>
+			<li id="ok7">出勤できます</li>
+			<li id="ok8">出勤できます</li>
+		</ul>
+		スプレットシート のURL
+		<input type="text" id="ss_url">
+		<br>
+		<textarea id="ta"></textarea>
+		<br>
+		<button id="submit">submit</button>
+
+
+
+
+	</main>
+
+	<footer></footer>
+	<script>
+		//じゃんけん用のSCRIPTを書いてください
+		$("#ok").on("click", function() {
+			$("#koba").html("小林");
+			$("#ta").text("出勤");
+		});
+		$("#ok1").on("click", function() {
+			$("#koba1").html("小林");
+		});
+		$("#ok2").on("click", function() {
+			$("#koba2").html("小林");
+		});
+
+
+		$("#ok3").on("click", function() {
+			$("#sato").html("佐藤");
+		});
+		$("#ok4").on("click", function() {
+			$("#sato1").html("佐藤");
+		});
+		$("#ok5").on("click", function() {
+			$("#sato2").html("佐藤");
+		});
+		$("#ok6").on("click", function() {
+			$("#suzu").html("鈴木");
+		});
+		$("#ok7").on("click", function() {
+			$("#suzu1").html("鈴木");
+		});
+		$("#ok8").on("click", function() {
+			$("#suzu2").html("鈴木");
+		});
+		document.getElementById("submit").onclick = input_to_sheet;
+
+		function input_to_sheet() {
+			var ss_url = document.getElementById("ss_url").value;
+			var value = document.getElementById("ta").value;
+			google.script.run
+				.withFailureHandler(onFailure)
+				.withSuccessHandler(onSuccess)
+				.input_to_sheet_gs(ss_url, value);
+		}
+
+		function onSuccess(result) {
+			alert(result);
+		}
+
+		function onFailure(e) {
+			alert([e.message, e.stack]);
+		}
+	</script>
+</body></html>
