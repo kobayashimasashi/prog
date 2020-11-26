@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>memopad</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/reset.css">
+</head>
+
+<body>
+	<section>
+		<div class="header-bg">
+			<div class="flex">
+				<div class="header_img_logo">
+					<div class="l_backgroundtxt">
+						<div class="backgroundtxt">G's Academy.</div>
+					</div>
+				</div>
+
+				<div>
+					<ul class="header_list">
+						<li class="header_item" id="save">
+							<div class="container">
+								<a href="#" class="btn-denim">SAVE</a>
+							</div>
+						</li>
+						<li class="header_item" id="clear">
+							<div class="container">
+								<a href="#" class="btn-denim">CLEAR</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<h2 class="title">problem<br>management<br>System</h2>
+
+
+			<input type="text" id="title" class="text_title">
+
+			<div class="mex">
+				<textarea name="" id="message" cols="30" rows="6" 　style="border:none;"></textarea>
+			</div>
+			<div id="list">
+
+			</div>
+
+			<table>
+				<thead>
+					<tr>
+						<th id="prev">&laquo;</th>
+						<th id="title" colspan="5">2020/11</th>
+						<th id="next">&raquo;</th>
+					</tr>
+					<tr>
+						<th>Sun</th>
+						<th>Mon</th>
+						<th>Tue</th>
+						<th>Wed</th>
+						<th>Thu</th>
+						<th>Fri</th>
+						<th>Sat</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td id="today" colspan="7">Today</td>
+					</tr>
+				</tfoot>
+			</table>
+
+
+		</div>
+
+
+
+
+	</section>
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/main_2.js"></script>
+</body>
+
+</html>
