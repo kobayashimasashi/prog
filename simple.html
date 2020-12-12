@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="utf-8">
+	<title>Chatアプリ</title>
+</head>
+
+<body>
+
+	<!-- コンテンツ表示画面 -->
+	<div>
+
+		<div>名前:<input type="text" id="uname"></div>
+		<div>
+			<textarea id="text" cols="30" rows="10"></textarea>
+			<button id="send">送信</button>
+		</div>
+
+		<div id="output" style="height: 300px;overflow: auto; border: 1px solid red;"></div>
+	</div>
+
+
+
+
+
+
+
+
+
+	<!--/ コンテンツ表示画面 -->
+
+
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- JQuery -->
+
+	<!--以下ファイヤーベース-->
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/8.1.2/firebase.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+https://firebase.google.com/docs/web/setup#available-libraries -->
+
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyCPFOdaaLOLSd0Yq3yukELtxllZ2rHRDc8",
+			authDomain: "gsdemo-4dbdb.firebaseapp.com",
+			databaseURL: "https://gsdemo-4dbdb-default-rtdb.firebaseio.com",
+			projectId: "gsdemo-4dbdb",
+			storageBucket: "gsdemo-4dbdb.appspot.com",
+			messagingSenderId: "923059393375",
+			appId: "1:923059393375:web:122853900b1c058959dcea"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		const ref = firebase.database().ref();
+
+	</script>
+
+
+
+	<script>
+		//送信イベント
+
+		$("#send").on("click", function() {
+			let week = ["日", "月", "火", "水", "木", "金"];
+			let now = new Date();
+			let month = now.getMonth() + 1;
+			let h = now.getHours();
+			let data = now.getDate();
+			let m = now.getMinutes();
+			var mmi = ('0' + m).slice(-2);
+			let day = now.getDate();
+
+			let str = month + "/" + data + "/" + h + ":" + mmi;
+			const uname = $("#uname").val();
+			const text = $("#text").val();
+			const msg = {
+				uname: uname,
+				text: text,
+				str: str
+			};
+			ref.push(msg); //送信する
+
+		});
+
+		$("#text").on("keydown", function(e) {
+			if (e.keyCode == 13) {
+				let week = ["日", "月", "火", "水", "木", "金"];
+				let now = new Date();
+				let month = now.getMonth() + 1;
+				let h = now.getHours();
+				let data = now.getDate();
+				let m = now.getMinutes();
+				var mmi = ('0' + m).slice(-2);
+				let day = now.getDate();
+
+				let str = month + "/" + data + "/" + h + ":" + mmi;
+				const uname = $("#uname").val();
+				const text = $("#text").val();
+				const msg = {
+					uname: uname,
+					text: text,
+					str: str
+				};
+
+				ref.push(msg); //送信する
+
+				//送信したらスクロールしないで一番下に表示する。
+				var $scrollAuto = $('#output');
+				$scrollAuto.animate({
+					scrollTop: $scrollAuto[0].scrollHeight
+				}, 0);
+			}
+
+
+		});
+
+		//受信イベント
+		ref.on("child_added", function(data) {
+			const v = data.val(); //オブジェクト変数がvに代入送られてきた値
+			const k = data.key; //データのユニークキー
+			const h = '<p>' + v.uname + '<br>' + v.text + '<br>' + v.str + '</p>';
+			$("#output").append(h);
+		});
+
+	</script>
+</body>
+
+</html>
