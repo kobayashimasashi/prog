@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Map:Geolocation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<!-- MAP[START] -->
+<h1>この辺さん</h1>
+<div id="myMap" class="map"></div>
+<!-- MAP[END] -->
+<div>
+    アクセスキーを入力<input id="key" value="a55a708cc371f0016fbcb6ce89755339" type="text" size="45">
+    <input type="button" id="btn" value="送信"><br>
+    緯度lat: <input type="text" id="lat" value="35.669118">
+    経度lon: <input type="text" id="lon" value="139.703355">
+</div>
+<table id="table">
+    <tr>
+        <th>店舗名</th>
+        <th>営業時間</th>
+    </tr>
+</table>
+<div id="geocode">geocode:data</div>
+
+
+<script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=[ *** YOUR MY KEY *** ]' async defer></script>
+<script src="BmapQuery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+//****************************************************************************************
+// BingMaps&BmapQuery
+//****************************************************************************************
+//Init
+
+//MAPを表示してます
+
+
+function GetMap(){
+    //------------------------------------------------------------------------
+    //1. Instance
+    //------------------------------------------------------------------------
+    const map = new Bmap("#myMap");
+    
+    //------------------------------------------------------------------------
+    //2. Display Map
+    //   startMap(lat, lon, "MapType", Zoom[1~20]);
+    //   MapType:[load, aerial,canvasDark,canvasLight,birdseye,grayscale,streetside]
+    //--------------------------------------------------
+   // map.startMap(47.6149, -122.1941, "load", 10);
+   //map.startMap(lat, lon, "load", 100);
+   //大通り公園付近スタート
+   map.startMap(43.059742, 141.346532, "load", 30);
+
+    //----------------------------------------------------
+    //3. Geocode(2 patterns)
+    // getGeocode("searchQuery",callback);
+    //----------------------------------------------------
+    
+    //A. Address "Seattle"
+    // map.getGeocode("Seattle", function(data){
+    //     console.log(data);          //Get Geocode ObjectData
+    //     const lat = data.latitude;  //Get latitude
+    //     const lon = data.longitude; //Get longitude
+    //     document.querySelector("#geocode").innerHTML=lat+','+lon;
+    // });
+    
+    //B.Get geocode of click location
+    //クリックした場所の緯度経度取得
+    map.onGeocode("click", function(clickdate){
+        console.log(clickdate);                   //Get Geocode ObjectData
+        const lat = clickdate.location.latitude;  //Get latitude
+        const lon = clickdate.location.longitude; //Get longitude
+        document.querySelector("#geocode").innerHTML=lat+','+lon;
+
+        
+//さっきクリックで取得した緯度経度を変数に入れて
+//次はぐるなびAPIの送信ボタン押した時にその緯度経度を入れるようにする
+                    $("#btn").on("click", function() {
+    //送信データをObject変数で用意
+    //参考URL:https://api.gnavi.co.jp/api/manual/restsearch/
+    const data = {
+                        // keyid: $("#key").val(), //必須myid
+                        keyid: "a55a708cc371f0016fbcb6ce89755339",
+                        latitude: lat,
+                        longitude: lon,
+                        range: 1, //範囲
+                        hit_per_page: 10,
+                        
+
+                    };
+                    //consoleを確認するとArrayでクリックしたちてんの範囲５で１０件が入ってくる
+    //Ajax（非同期通信）
+    axios.get('https://api.gnavi.co.jp/RestSearchAPI/v3/', {
+        params:data
+    })
+    .then(function (response) {
+        //データ受信成功！！showData関数にデータを渡す
+        showData(response.data);
+    }).catch(function (error) {
+        console.log(error);//通信Error
+    }).then(function () {
+        //console.log("Last");//通信OK/Error後に処理を必ずさせたい場合
+    });
+    function showData(data){
+    //データ確認用
+    console.log(data.rest);
+
+    //データを繰り返し処理で取得
+    const len  = data.rest.length; //データ数を取得
+    for( let i=0; i<len; i++){
+        $("#table").append('<tr><td>' + data.rest[i].name + '</td><td>' + data.rest[i].code.category_name_l + '</td><td>' + data.rest[i].address + '</td><td><a>' + data.rest[i].coupon_url.mobile + '</a></td></tr>');
+    };
+}
+});
+
+    });
+    
+}
+</script>
+</script>
+
+</body>
+</html>
